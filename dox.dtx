@@ -110,44 +110,12 @@
 %    \end{macrocode}
 %    \begin{macrocode}
 %<*dox>
-\@ifundefined{PrintOptionName}{%
-  \def\PrintOptionName#1{\strut\MacroFont\string#1\ }}{}
-\@ifundefined{PrintCounterName}{%
-  \def\PrintCounterName#1{\strut\MacroFont\string#1\ }}{}
-\@ifundefined{PrintColorName}{%
-  \def\PrintColorName#1{\strut\MacroFont\string#1\ }}{}
-
-\def\SpecialMainOptionIndex#1{%
-  \@bsphack%
-  \special@index{%
-    #1\actualchar{\string\ttfamily\space#1} (option)\encapchar main}%
-  \special@index{%
-    options:\levelchar#1\actualchar%
-    {\string\ttfamily\space#1}\encapchar main}%
-  \@esphack}
-\def\SpecialMainCounterIndex#1{%
-  \@bsphack%
-  \special@index{%
-    #1\actualchar{\string\ttfamily\space#1} (counter)\encapchar main}%
-  \special@index{%
-    counters:\levelchar#1\actualchar%
-    {\string\ttfamily\space#1}\encapchar main}%
-  \@esphack}
-\def\SpecialMainColorIndex#1{%
-  \@bsphack%
-  \special@index{%
-    #1\actualchar{\string\ttfamily\space#1} (color)\encapchar main}%
-  \special@index{%
-    colors:\levelchar#1\actualchar%
-    {\string\ttfamily\space#1}\encapchar main}%
-  \@esphack}
-
 %% In doc.sty, the macro and environment environments go through the \m@cro@
 %% command which implements specific parts by testing a boolean condition as
 %% its first argument. This mechanism is not extensible, so I have to hack
 %% away a specific version for options and counters, only which looks pretty
 %% much like the original one:
-\long\def\m@cro@docx#1#2{%
+\long\def\m@cro@dox#1#2{%
   \endgroup%
   \topsep\MacroTopsep\trivlist
   \def\makelabel##1{\llap{##1}}%
@@ -173,22 +141,20 @@
   \global\advance\c@CodelineNo\m@ne
   \ignorespaces}
 
-\def\counter{\begingroup
-  \catcode`\\12
-  \MakePrivateLetters\m@cro@docx{Counter}}
-\let\endcounter\endtrivlist
-
+\@ifundefined{PrintOptionName}{%
+  \def\PrintOptionName#1{\strut\MacroFont\string#1\ }}{}
+\def\SpecialMainOptionIndex#1{%
+  \@bsphack%
+  \special@index{%
+    #1\actualchar{\string\ttfamily\space#1} (option)\encapchar main}%
+  \special@index{%
+    options:\levelchar#1\actualchar%
+    {\string\ttfamily\space#1}\encapchar main}%
+  \@esphack}
 \def\option{\begingroup
   \catcode`\\12
-  \MakePrivateLetters\m@cro@docx{Option}}
+  \MakePrivateLetters\m@cro@dox{Option}}
 \let\endoption\endtrivlist
-
-\def\color{\begingroup
-  \catcode`\\12
-  \MakePrivateLetters\m@cro@docx{Color}}
-\let\endcolor\endtrivlist
-
-
 \@ifundefined{PrintDescribeOption}{%
   \def\PrintDescribeOption#1{\strut\MacroFont#1\ }}{}
 \def\SpecialOptionIndex#1{\@bsphack
@@ -203,6 +169,22 @@
   \leavevmode\@bsphack\begingroup\MakePrivateLetters
   \Describe@Option}
 
+
+
+\@ifundefined{PrintCounterName}{%
+  \def\PrintCounterName#1{\strut\MacroFont\string#1\ }}{}
+\def\SpecialMainCounterIndex#1{%
+  \@bsphack%
+  \special@index{%
+    #1\actualchar{\string\ttfamily\space#1} (counter)\encapchar main}%
+  \special@index{%
+    counters:\levelchar#1\actualchar%
+    {\string\ttfamily\space#1}\encapchar main}%
+  \@esphack}
+\def\counter{\begingroup
+  \catcode`\\12
+  \MakePrivateLetters\m@cro@dox{Counter}}
+\let\endcounter\endtrivlist
 \@ifundefined{PrintDescribeCounter}{%
   \def\PrintDescribeCounter#1{\strut\MacroFont#1\ }}{}
 \def\SpecialCounterIndex#1{\@bsphack
@@ -217,6 +199,22 @@
   \leavevmode\@bsphack\begingroup\MakePrivateLetters
   \Describe@Counter}
 
+
+
+\@ifundefined{PrintColorName}{%
+  \def\PrintColorName#1{\strut\MacroFont\string#1\ }}{}
+\def\SpecialMainColorIndex#1{%
+  \@bsphack%
+  \special@index{%
+    #1\actualchar{\string\ttfamily\space#1} (color)\encapchar main}%
+  \special@index{%
+    colors:\levelchar#1\actualchar%
+    {\string\ttfamily\space#1}\encapchar main}%
+  \@esphack}
+\def\color{\begingroup
+  \catcode`\\12
+  \MakePrivateLetters\m@cro@dox{Color}}
+\let\endcolor\endtrivlist
 \@ifundefined{PrintDescribeColor}{%
   \def\PrintDescribeColor#1{\strut\MacroFont#1\ }}{}
 \def\SpecialColorIndex#1{\@bsphack
