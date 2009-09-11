@@ -33,9 +33,7 @@
 (TeX-add-style-hook "dox"
   (function
    (lambda ()
-     (TeX-add-symbols
-      ;; Commands		Deprecated / Obsolete / Legacy versions
-      '("doxitem" "Functions name" "singular" "plural")))))
+     (TeX-add-symbols '("doxitem" "Functions name" "singular" "plural")))))
 
 
 
