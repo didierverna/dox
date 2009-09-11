@@ -92,10 +92,41 @@
 %
 %
 % \begin{abstract}
+%   The \texttt{doc} package provides \LaTeX{} developers with means to
+%   describe the usage and the definition of new macros and environments.
+%   However, there is no simple way to extend this functionality to other
+%   items (options or counters for instance). The \texttt{dox} package is
+%   designed to circumvent this limitation.
 % \end{abstract}
 %
-% \tableofcontents
+% ^^A \tableofcontents
 %
+% \section{Usage}
+% \emph{Note: we assume that you know about \texttt{doc}'s \cs{DescribeMacro},
+%   \cs{DescribeEnv} and all other associated commands and environments}.
+%
+% \medskip\noindent
+% \DescribeMacro{\doxitem}\marg{funcsname}\marg{singular}\marg{plural}\\
+% The \dox style provides a single user-level command to create new items with
+% functionalities equivalent to what \texttt{doc} provides for macros and
+% environments. Perhaps the simplest way to describe how it works is to give
+% an example. Suppose you would like to describe package options. Here is what
+% you need to do:
+% \begin{verbatim}
+% \usepackage{dox}
+% \doxitem{Option}{option}{options}
+% \end{verbatim}
+% \dox then creates the following API for you:
+% \begin{itemize}
+% \item \cs{DescribeOption}
+% \item the \texttt{option} environment
+% \item \cs{PrintDescribeOption}
+% \item \cs{PrintOptionName}
+% \item \cs{SpecialMainOptionIndex}
+% \item \cs{SpecialOptionIndex}
+% \end{itemize}
+%
+% That's about it.
 % \StopEventually{\par Well, I think that's it. Enjoy using \dox!
 %   \vfill\hfill\small \packagecopyright{}.}
 %
