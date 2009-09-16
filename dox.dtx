@@ -48,7 +48,7 @@
 % \fi
 %
 % \catcode`\¡=14
-% \CheckSum{157}
+% \CheckSum{159}
 % \GetFileInfo{dox.inc}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -151,6 +151,7 @@
 \long\def\doxm@cro@#1#2{%
   \endgroup%
   \topsep\MacroTopsep\trivlist
+  \edef\saved@macroname{\string#2}%
   \def\makelabel##1{\llap{##1}}%
   \if@inlabel
     \let\@tempa\@empty
@@ -192,7 +193,7 @@
 %    \begin{macrocode}
   \@ifundefined{Print#1Name}{%
     \expandafter\def\csname Print#1Name\endcsname##1{%
-      \strut\MacroFont\string##1\ }}{}
+      \strut\MacroFont##1\ }}{}
 %    \end{macrocode}
 % The \cs{SpecialMain}\meta{item}\texttt{Index} macro:
 %    \begin{macrocode}
