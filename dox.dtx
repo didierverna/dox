@@ -95,21 +95,25 @@
 %   The \texttt{doc} package provides \LaTeX{} developers with means to
 %   describe the usage and the definition of new macros and environments.
 %   However, there is no simple way to extend this functionality to other
-%   items (options or counters for instance). The \texttt{dox} package is
-%   designed to circumvent this limitation.
+%   items (options or counters for instance). \dox is designed to circumvent
+%   this limitation, and also provides some improvements over the existing
+%   functionality.
 % \end{abstract}
 %
 % ^^A \tableofcontents
 %
 % \section{Usage}
-% \emph{Note: we assume that you know about \texttt{doc}'s \cs{DescribeMacro},
-%   \cs{DescribeEnv} and all other associated commands and environments}.
+% \begin{quotation}
+%   \emph{\textbf{Note}: we assume that you know about \texttt{doc}'s
+%   \cs{DescribeMacro}, \cs{DescribeEnv} and all other associated commands and
+%   environments}.
+% \end{quotation}
 %
-% \medskip\noindent
+% \subsection{Creating new documentation items}
 % \DescribeMacro{\doxitem}\marg{funcsname}\marg{singular}\marg{plural}\\
-% The \dox style provides a single user-level command to create new items with
-% functionalities equivalent to what \texttt{doc} provides for macros and
-% environments. Perhaps the simplest way to describe how it works is to give
+% \dox provides a command named \cs{doxitem} to create new documentation items
+% with functionalities equivalent to what \texttt{doc} provides for macros and
+% environments. Perhaps the simplest way to describe what it does is to give
 % an example. Suppose you would like to describe package options. Here is what
 % you need to do:
 % \begin{verbatim}
@@ -125,8 +129,43 @@
 % \item \cs{SpecialMainOptionIndex}
 % \item \cs{SpecialOptionIndex}
 % \end{itemize}
+% In order to comply with \texttt{doc}'s original behavior, the commands
+% \cs{PrintDescribeOption} and \cs{PrintOptionName} will only be defined if
+% they do not already exist.
 %
-% That's about it.
+% \subsection{Improvements over \texttt{doc}'s original API}
+% \begin{quotation}\itshape
+%   Please note that the improvements described in this section are also
+%   available in \texttt{doc}'s original macro and environment APIs, because
+%   \dox redefines them.
+% \end{quotation}
+% Compared to \texttt{doc}, the APIs created by \cs{doxitem} are extended with
+% a first optional argument, so that, continuing with our initial example, the
+% real prototypes are in fact the following:
+% \begin{verbatim}
+% \DescribeOption[opt,...]{name}
+%
+% \begin{option}[opt,...]{name}
+% %% ...
+% \end{option}
+% \end{verbatim}
+% The options currently supported are:
+% \begin{description}
+% \item[noprint] Avoid printing \meta{name} in the margin
+% \item[noindex] Avoid indexing \meta{name}
+% \end{description}
+% These options are useful if you don't want printing or indexing locally for
+% one particular item. Without them, one would need to locally \cs{let} the
+% relevant commands to \cs{@gobble} which is very inconvenient.
+%
+% There is also another advantage in using the \texttt{noprint} option: in
+% \texttt{doc}'s original implementation, a margin paragraph will still be
+% created just to be empty, hence wasting float resources. If you're
+% referencing a lot of items close to each other, this may lead to a ``Too
+% many unprocessed floats'' error. With \dox, the \cs{marginpar} is avoided
+% altogether.
+%
+%
 % \StopEventually{\vfill\hfill\small \packagecopyright{}.}
 %
 % \section{Implementation}
@@ -283,6 +322,16 @@
 %    \begin{macrocode}
 \let\SpecialMacroIndex\SpecialUsageIndex
 \@doxcreatedescribe{Macro}
+
+%    \end{macrocode}
+% Making the \texttt{macro} environment work the \dox way is straightforward.
+% The only precaution we need is to to provide a \cs{SpecialMainMacroIndex}
+% macro that does the job originally done in \texttt{doc}'s \cs{m@cro@}.
+%    \begin{macrocode}
+\def\SpecialMainMacroIndex#1{%
+  \SpecialMainIndex{#1}\nobreak%
+  \DoNotIndex{#1}}
+\@doxcreateenv{Macro}{macro}
 
 %    \end{macrocode}
 %
