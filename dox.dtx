@@ -252,6 +252,28 @@
 %    \end{macrocode}
 % \end{macro}
 %
+% \subsection{API construction}
+% \begin{macro}{\@doxcreatedescribe}
+%   \marg{item}
+%    \begin{macrocode}
+\def\@doxcreatedescribe#1{%
+  \expandafter\def\csname Describe#1\endcsname{%
+    \@ifnextchar[%]
+    {\@doxdescribe{#1}}{\@doxdescribe{#1}[]}}}
+
+%    \end{macrocode}
+% \end{macro}
+%
+% \subsection{\texttt{Doc} overrides}
+% \subsubsection{Macro facilities}
+% Making \cs{DescribeMacro} work the \dox way is not difficult: we only need
+% to provide an alias to \cs{SpecialUsageIndex}.
+%    \begin{macrocode}
+\let\SpecialMacroIndex\SpecialUsageIndex
+\@doxcreatedescribe{Macro}
+
+%    \end{macrocode}
+%
 % \subsection{API creation}
 % The whole user interface is created in one macro call.
 % \begin{macro}{\doxitem}
@@ -295,9 +317,7 @@
 %   \begin{macro}{\Describe...}
 %     \oarg{options}\marg{name}
 %    \begin{macrocode}
-  \expandafter\def\csname Describe#1\endcsname{%
-    \@ifnextchar[%]
-    {\@doxdescribe{#1}}{\@doxdescribe{#1}[]}}
+  \@doxcreatedescribe{#1}
 %    \end{macrocode}
 %   \end{macro}
 %   \paragraph{The \meta{item} environment macros} The opening macro calls
