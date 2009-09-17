@@ -48,7 +48,7 @@
 % \fi
 %
 % \catcode`\¡=14
-% \CheckSum{159}
+% ^^A\CheckSum{159}
 % \GetFileInfo{dox.inc}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -183,6 +183,16 @@
 
 %    \end{macrocode}
 % \end{macro}
+% \begin{macro}{\@doxdescribe}
+%   \marg{item}\marg{name}
+%    \begin{macrocode}
+\newcommand*\@doxdescribe[2]{%
+  \endgroup
+  \marginpar{\raggedleft\@nameuse{PrintDescribe#1}{#2}}%
+  \@nameuse{Special#1Index}{#2}\@esphack\ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+%
 % \subsection{API creation}
 % \begin{macro}{\doxitem}
 %   \marg{funcsname}\marg{singular}\marg{plural}
@@ -220,19 +230,13 @@
     \index{#3:\levelchar##1\actualchar{\protect\ttfamily##1}\encapchar
       usage}\@esphack}
 %    \end{macrocode}
-% The \cs{Describe@}\meta{item} macro:
-%    \begin{macrocode}
-  \expandafter\def\csname Describe@#1\endcsname##1{%
-    \endgroup
-    \marginpar{\raggedleft\@nameuse{PrintDescribe#1}{##1}}%
-    \@nameuse{Special#1Index}{##1}\@esphack\ignorespaces}
-%    \end{macrocode}
-% The \cs{Describe}\meta{item} macro:
+% \begin{macro}{\Describe...}
+%   \marg{name}
 %    \begin{macrocode}
   \expandafter\def\csname Describe#1\endcsname{%
-    \leavevmode\@bsphack\begingroup\MakePrivateLetters
-    \@nameuse{Describe@#1}}
+    \leavevmode\@bsphack\begingroup\MakePrivateLetters\@doxdescribe{#1}}
 %    \end{macrocode}
+% \end{macro}
 % The \meta{item} environment:
 %    \begin{macrocode}
   \expandafter\def\csname #2\endcsname{%
