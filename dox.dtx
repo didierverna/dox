@@ -158,53 +158,63 @@
 %   \cs{m@cro@} command which implements specific parts by testing a boolean
 %   condition as its first argument. This mechanism is not extensible, so I
 %   have to hack away a more generic version that would work for any new
-%   \texttt{dox} item, only which looks pretty much like the original one:
+%   \texttt{dox} item, only which looks pretty much like the original one.
 %    \begin{macrocode}
 %<*dox>
 \long\def\@@doxenv#1#2{%
-    \endgroup%
-    \topsep\MacroTopsep%
-    \trivlist%
-      \edef\saved@macroname{\string#2}%
-      \def\makelabel##1{\llap{##1}}%
-      \if@inlabel%
-        \let\@tempa\@empty%
-        \count@\macro@cnt%
-        \loop\ifnum\count@>\z@%
-          \edef\@tempa{\@tempa\hbox{\strut}}\advance\count@\m@ne%
-        \repeat%
+  \endgroup%
+  \topsep\MacroTopsep%
+  \trivlist%
+    \edef\saved@macroname{\string#2}%
+    \def\makelabel##1{\llap{##1}}%
+    \if@inlabel%
+      \let\@tempa\@empty%
+      \count@\macro@cnt%
+      \loop\ifnum\count@>\z@%
+        \edef\@tempa{\@tempa\hbox{\strut}}\advance\count@\m@ne%
+      \repeat%
       \edef\makelabel##1{\llap{\vtop to\baselineskip{\@tempa\hbox{##1}\vss}}}%
       \advance\macro@cnt\@ne%
     \else%
       \macro@cnt\@ne%
     \fi%
-    \edef\@tempa{%
-      \noexpand\item[%
+    \ifdox@noprint%
+      \item%
+    \else%
+      \edef\@tempa{%
+        \noexpand\item[%
 %    \end{macrocode}
-% That's the first modification:
+% Apart from dependency on options, the first modification to the original
+% macro involves dynamically constructing the name of the print macro:
 %    \begin{macrocode}
         \expandafter\noexpand\csname Print#1Name\endcsname{\saved@macroname}]}%
-    \@tempa%
-    \global\advance\c@CodelineNo\@ne%
+      \@tempa%
+    \fi%
+    \ifdox@noindex\else%
+      \global\advance\c@CodelineNo\@ne%
 %    \end{macrocode}
-% And that's the second one:
+% and the second one involves dynamically constructing the name of the index
+% macro:
 %    \begin{macrocode}
-    \@nameuse{SpecialMain#1Index}{#2}\nobreak%
-    \global\advance\c@CodelineNo\m@ne%
+      \@nameuse{SpecialMain#1Index}{#2}\nobreak%
+      \global\advance\c@CodelineNo\m@ne%
+    \fi%
     \ignorespaces}
 %    \end{macrocode}
 % \end{macro}
 % \begin{macro}{\@doxenv}
 %   \marg{item}\oarg{options}\\
-%   Handle optional arguments and call \cs{@@doxenv}.
+%   Handle optional arguments and call \cs{@@doxenv}. Because environments can
+%   be nested, we can't rely on grouping for getting options default values.
+%   Hence, we need to reset the options at every call.
 %    \begin{macrocode}
 \def\@doxenv#1[#2]{%
+  \dox@noprintfalse\dox@noindexfalse%
+  \setkeys{dox}{#2}%
   \begingroup%
-    \setkeys{dox}{#2}%
-    \begingroup%
-      \catcode`\\12%
-      \MakePrivateLetters%
-      \@@doxenv{#1}}
+    \catcode`\\12%
+    \MakePrivateLetters%
+    \@@doxenv{#1}}
 
 %    \end{macrocode}
 % \end{macro}
@@ -292,16 +302,14 @@
 %   \end{macro}
 %   \paragraph{The \meta{item} environment macros} The opening macro calls
 %   \cs{@doxenv} after fixing the presence of optional arguments. The
-%   closing macro first closes the group opened by \cs{@doxenv} for local
-%   options processing, and then closes the \texttt{trivlist} opened by
-%   \cs{@@doxenv}.
+%   closing macro closes the \texttt{trivlist} opened by \cs{@@doxenv}.
 %   \begin{environment}{item}
 %     \oarg{options}\marg{name}
 %    \begin{macrocode}
   \expandafter\def\csname #2\endcsname{%
     \@ifnextchar[%]
     {\@doxenv{#1}}{\@doxenv{#1}[]}}
-  \expandafter\def\csname end#2\endcsname{\endgroup\endtrivlist}}
+  \expandafter\let\csname end#2\endcsname\endtrivlist}
 %</dox>
 %    \end{macrocode}
 %   \end{environment}
