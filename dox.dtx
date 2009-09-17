@@ -156,7 +156,7 @@
 %    \end{macrocode}
 %
 % \subsection{Real job execution}
-% \begin{macro}{\doxm@cro@}
+% \begin{macro}{\@@doxenv}
 %   \marg{item}\marg{contents}\\
 %   In \texttt{doc.sty}, the macro and environment environments go through the
 %   \cs{m@cro@} command which implements specific parts by testing a boolean
@@ -165,7 +165,7 @@
 %   \texttt{dox} item, only which looks pretty much like the original one:
 %    \begin{macrocode}
 %<*dox>
-\long\def\doxm@cro@#1#2{%
+\long\def\@@doxenv#1#2{%
   \endgroup%
   \topsep\MacroTopsep\trivlist
   \edef\saved@macroname{\string#2}%
@@ -195,8 +195,17 @@
 % And that's the second one:
 %    \begin{macrocode}
   \@nameuse{SpecialMain#1Index}{#2}\nobreak
+%  \endgroup
   \global\advance\c@CodelineNo\m@ne
   \ignorespaces}
+
+\def\@doxenv#1[#2]{%
+  \begingroup%
+    \setkeys{dox}{#2}%
+    \begingroup%
+      \catcode`\\12%
+      \MakePrivateLetters%
+      \@@doxenv{#1}}
 
 %    \end{macrocode}
 % \end{macro}
@@ -273,10 +282,9 @@
 % The \meta{item} environment:
 %    \begin{macrocode}
   \expandafter\def\csname #2\endcsname{%
-    \begingroup
-      \catcode`\\12
-      \MakePrivateLetters\doxm@cro@{#1}}
-  \expandafter\let\csname end#2\endcsname\endtrivlist}
+    \@ifnextchar[%]
+    {\@doxenv{#1}}{\@doxenv{#1}[]}}
+  \expandafter\def\csname end#2\endcsname{\endgroup\endtrivlist}}
 
 %</dox>
 %    \end{macrocode}
