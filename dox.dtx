@@ -80,6 +80,8 @@
 % \newcommand\packagecopyright{%
 %   Copyright \copyright{} 2009 Didier Verna}
 %
+% \newcommand\api{\textsc{api}\xspace}
+%
 % \pagestyle{mystyle}
 % \markright{\hskip-.5\marginparwidth \dox \fileversion{} (\filedate)}
 %
@@ -93,14 +95,17 @@
 %
 % \begin{abstract}
 %   The \texttt{doc} package provides \LaTeX{} developers with means to
-%   describe the usage and the definition of new macros and environments.
+%   describe the usage and the definition of new commands and environments.
 %   However, there is no simple way to extend this functionality to other
 %   items (options or counters for instance). \dox is designed to circumvent
-%   this limitation, and also provides some improvements over the existing
-%   functionality.
+%   this limitation, and provides some improvements over the existing
+%   functionality as well.
 % \end{abstract}
 %
 % \tableofcontents
+%
+% \section{Requirements}
+% \dox currently requires the \texttt{kvoptions} package.
 %
 % \section{Usage}
 % \begin{quotation}
@@ -110,17 +115,21 @@
 % \end{quotation}
 %
 % \subsection{Creating new documentation items}
-% \DescribeMacro{\doxitem}\marg{name}\marg{envname}\marg{idxname}\\
+% \DescribeMacro{\doxitem}
+% \oarg{options}\marg{name}\marg{envname}\marg{idxcat}\\
 % \dox provides a command named \cs{doxitem} to create new documentation items
-% with functionalities equivalent to what \texttt{doc} provides for macros and
-% environments. Perhaps the simplest way to describe what it does is to give
-% an example. Suppose you would like to describe package options. Here is what
-% you need to do:
+% with functionalities equivalent to what \texttt{doc} provides for commands
+% and environments. A whole \api is created for every new items.
+%
+% \subsubsection{Example}
+% Perhaps the simplest way to describe what it does is to give an example.
+% Suppose you would like to describe package options. Here is what you need to
+% do:
 % \begin{verbatim}
 % \usepackage{dox}
 % \doxitem{Option}{option}{options}
 % \end{verbatim}
-% \dox then creates the following API for you:
+% \dox then creates the following \api for you:
 % \begin{itemize}
 % \item \cs{DescribeOption}
 % \item the \texttt{option} environment
@@ -129,21 +138,64 @@
 % \item \cs{SpecialMainOptionIndex}
 % \item \cs{SpecialOptionIndex}
 % \end{itemize}
-% In order to comply with \texttt{doc}'s original behavior, the commands
-% \cs{PrintDescribeOption} and \cs{PrintOptionName} will only be defined if
-% they do not already exist.
+% \begin{sloppypar}\noindent
+%   In order to comply with \texttt{doc}'s original behavior, the commands
+%   \cs{PrintDescribeOption} and \cs{PrintOptionName} will only be defined if
+%   they do not already exist.
+% \end{sloppypar}
 %
-% \subsection{Improvements over \texttt{doc}'s original API}
+% \subsubsection{Details}
+% Here is a more precise description of the arguments to \cs{doxitem}.
+% \begin{itemize}
+% \item \meta{name} (\texttt{Option} in our example) is used to construct the
+%   names of the commands in the new \api. It usually starts with an upcase
+%   letter.
+% \item \meta{envname} (\texttt{option} in our example) is the name of the
+%   created environment. Be sure to avoid name clashes here! If you start
+%   experimenting odd behavior, you've probably overridden an existing command
+%   with your new environment.\footnote{It is a pity that \LaTeX{} use the
+%     same namespace for commands and environments. The opening command for
+%     environment \texttt{env} should be named \cs{beginenv} and not just
+%     \cs{env}}
+% \item \meta{idxcat} (\texttt{options} in our example) is the index category
+%   under which your items will appear. For example, all indexed options will
+%   be listed in the ``options:'' index entry.
+% \end{itemize}
+%
+% \subsubsection{Options to \cs{doxitem}}
+% The first (optional) argument to \cs{doxitem} may contain a comma-separated
+% list of options. Currently, there is only one supported option:
+% \texttt{idxtype}.
+%
+% We saw earlier that individual items appear under the \texttt{idxcat} index
+% entry, but items also appear as standalone index entries, alphabetically
+% sorted with their type in parenthesis. For instance, the \texttt{final}
+% option would appear like this under the \texttt{F} index entry:
+% \mbox{``\texttt{final} (option)''}.
+%
+% By default, the index type is the same as the environment's name (the
+% \meta{envname} argument). However, you can change this by providing a value
+% to the \texttt{idxtype} option.
+%
+% For instance, you may find the word ``environment'' too long for an index
+% type. In that case, you may redefine the \texttt{environment} \api like
+% this:
+% \begin{verbatim}
+% \doxitem[idxtype=env.]{Env}{environment}{environments}
+% \end{verbatim}
+%
+% \subsection{Improvements over \texttt{doc}'s original \api}
 % \begin{quotation}\itshape
 %   Please note that the improvements described in this section are also
-%   available in \texttt{doc}'s original macro and environment APIs, because
-%   \dox redefines them.
+%   available in \texttt{doc}'s original command and environment \api's,
+%   because \dox redefines them.
 % \end{quotation}
 %
 % \subsubsection{Additional (optional) argument}
-% Compared to \texttt{doc}, the APIs created by \cs{doxitem} are extended with
-% a first optional argument, so that, continuing with our initial example, the
-% real prototypes are in fact the following:
+% Compared to \texttt{doc}, the \api's created by \cs{doxitem} are extended
+% with a first optional argument containing a comma-separated list of options,
+% such that, continuing with our initial example, the real prototypes are in
+% fact the following:
 % \begin{verbatim}
 % \DescribeOption[opt,...]{name}
 %
@@ -182,9 +234,13 @@
 % \DescribeOption[noprint=false]{french}
 % \end{verbatim}
 %
+% \section{Conclusion}
+% If you want to see \dox in action, take a look at the documentation of the
+% \textsf{FiXme} package. In fact, I wrote \dox for it in the first place.
 %
 % \StopEventually{\vfill\hfill\small \packagecopyright{}.}
 %
+% \appendix
 % \section{Implementation}
 % \subsection{Preamble}
 %    \begin{macrocode}
@@ -193,30 +249,35 @@
 \ProvidesPackage{dox}[2009/09/17 v1.0 Extensions to the doc package]
 
 %</header>
+%<*dox>
 \RequirePackage{kvoptions}
 \SetupKeyvalOptions{family=dox,prefix=dox@}
 
 %    \end{macrocode}
 %
 % \subsection{\dox options}
+% These two options are available for use in \cs{usepackage} or in the
+% generated item \api's:
 %    \begin{macrocode}
-\DeclareStringOption[\@empty]{printname}
-\DeclareStringOption[\@empty]{indexname}
 \DeclareBoolOption{noprint}
 \DeclareBoolOption{noindex}
+%    \end{macrocode}
+% This one is for \cs{doxitem} only:
+%    \begin{macrocode}
+\DeclareStringOption{idxtype}
 
 %    \end{macrocode}
 %
 % \subsection{\dox environments}
 % \begin{macro}{\@@doxenv}
 %   \marg{item}\marg{name}\\
-%   In \texttt{doc.sty}, the macro and environment environments go through the
-%   \cs{m@cro@} command which implements specific parts by testing a boolean
-%   condition as its first argument. This mechanism is not extensible, so I
-%   have to hack away a more generic version that would work for any new
-%   \texttt{dox} item, only which looks pretty much like the original one.
+%   In \texttt{doc.sty}, the \texttt{macro} and \texttt{environment}
+%   environments go through the \cs{m@cro@} macro which implements specific
+%   parts by testing a boolean condition as its first argument. This mechanism
+%   is not extensible, so I have to hack away a more generic version that
+%   would work for any new \texttt{dox} item, only which looks pretty much
+%   like the original one.
 %    \begin{macrocode}
-%<*dox>
 \long\def\@@doxenv#1#2{%
   \endgroup%
   \topsep\MacroTopsep%
@@ -310,6 +371,36 @@
 % \end{macro}
 %
 % \subsection{API construction}
+% \begin{macro}{\@doxcreatespecialmainindex}
+%   \marg{item}\marg{idxtype}\marg{idxcat}
+%    \begin{macrocode}
+\def\@doxcreatespecialmainindex#1#2#3{%
+  \expandafter\def\csname SpecialMain#1Index\endcsname##1{%
+    \@bsphack%
+    \special@index{%
+      ##1\actualchar{\string\ttfamily\space##1} (#2)\encapchar main}%
+    \special@index{%
+      #3:\levelchar##1\actualchar%
+      {\string\ttfamily\space##1}\encapchar main}%
+    \@esphack}}
+
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@doxcreatespecialindex}
+%   \marg{item}\marg{idxtype}\marg{idxcat}
+%    \begin{macrocode}
+\def\@doxcreatespecialindex#1#2#3{%
+  \expandafter\def\csname Special#1Index\endcsname##1{%
+    \@bsphack%
+    \index{##1\actualchar{\protect\ttfamily##1}
+      (#2)\encapchar usage}%
+    \index{#3:\levelchar##1\actualchar{\protect\ttfamily##1}\encapchar
+      usage}%
+    \@esphack}}
+
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\@doxcreatedescribe}
 %   \marg{item}
 %    \begin{macrocode}
@@ -362,63 +453,55 @@
 
 %    \end{macrocode}
 %
-%
 % \subsection{API creation}
 % The whole user interface is created in one macro call.
 % \begin{macro}{\doxitem}
-%   \marg{name}\marg{envname}\marg{idxname}
+%   \oarg{options}\marg{name}\marg{envname}\marg{idxcat}
 %    \begin{macrocode}
-\newcommand\doxitem[3]{%
+\newcommand\doxitem[4][]{%
+  \def\dox@idxtype{#3}%
+  \setkeys{dox}{#1}
 %    \end{macrocode}
 %   \begin{macro}{\Print...Name}
 %     \marg{name}
 %    \begin{macrocode}
-  \@ifundefined{Print#1Name}{%
-    \expandafter\def\csname Print#1Name\endcsname##1{%
+  \@ifundefined{Print#2Name}{%
+    \expandafter\def\csname Print#2Name\endcsname##1{%
       \strut\MacroFont##1\ }}{}
 %    \end{macrocode}
 %   \end{macro}
 %   \begin{macro}{\SpecialMain...Index}
 %     \marg{name}
 %    \begin{macrocode}
-  \expandafter\def\csname SpecialMain#1Index\endcsname##1{%
-    \@bsphack%
-    \special@index{%
-      ##1\actualchar{\string\ttfamily\space##1} (#2)\encapchar main}%
-    \special@index{%
-      #3:\levelchar##1\actualchar%
-      {\string\ttfamily\space##1}\encapchar main}%
-    \@esphack}
+  \def\@doxexpr{\@doxcreatespecialmainindex{#2}}%
+  \expandafter\@doxexpr\expandafter{\dox@idxtype}{#4}%
 %    \end{macrocode}
 %   \end{macro}
 %   \begin{macro}{\PrintDescribe...}
 %     \marg{name}
 %    \begin{macrocode}
-  \@ifundefined{PrintDescribe#1}{%
-    \expandafter\def\csname PrintDescribe#1\endcsname##1{%
+  \@ifundefined{PrintDescribe#2}{%
+    \expandafter\def\csname PrintDescribe#2\endcsname##1{%
       \strut\MacroFont##1\ }}{}
 %    \end{macrocode}
 %   \end{macro}
 %   \begin{macro}{\Special...Index}
 %     \marg{name}
 %    \begin{macrocode}
-  \expandafter\def\csname Special#1Index\endcsname##1{\@bsphack
-    \index{##1\actualchar{\protect\ttfamily##1}
-      (#2)\encapchar usage}%
-    \index{#3:\levelchar##1\actualchar{\protect\ttfamily##1}\encapchar
-      usage}\@esphack}
+  \def\@doxexpr{\@doxcreatespecialindex{#2}}%
+  \expandafter\@doxexpr\expandafter{\dox@idxtype}{#4}%
 %    \end{macrocode}
 %   \end{macro}
 %   \begin{macro}{\Describe...}
 %     \oarg{options}\marg{name}
 %    \begin{macrocode}
-  \@doxcreatedescribe{#1}
+  \@doxcreatedescribe{#2}
 %    \end{macrocode}
 %   \end{macro}
 %   \begin{environment}{item}
 %     \oarg{options}\marg{name}
 %    \begin{macrocode}
-  \@doxcreateenv{#1}{#2}}
+  \@doxcreateenv{#2}{#3}}
 
 %    \end{macrocode}
 %   \end{environment}
