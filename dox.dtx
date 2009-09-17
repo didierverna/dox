@@ -137,16 +137,12 @@
 \ProvidesPackage{dox}[2009/09/17 v1.0 Extensions to the doc package]
 
 %</header>
-%    \end{macrocode}
-%
-% \subsection{Preamble}
-%    \begin{macrocode}
 \RequirePackage{kvoptions}
 \SetupKeyvalOptions{family=dox,prefix=dox@}
 
 %    \end{macrocode}
 %
-% \subsection{Options}
+% \subsection{\dox options}
 %    \begin{macrocode}
 \DeclareStringOption[\@empty]{printname}
 \DeclareStringOption[\@empty]{indexname}
@@ -155,7 +151,7 @@
 
 %    \end{macrocode}
 %
-% \subsection{Real job execution}
+% \subsection{\dox environments}
 % \begin{macro}{\@@doxenv}
 %   \marg{item}\marg{contents}\\
 %   In \texttt{doc.sty}, the macro and environment environments go through the
@@ -166,39 +162,42 @@
 %    \begin{macrocode}
 %<*dox>
 \long\def\@@doxenv#1#2{%
-  \endgroup%
-  \topsep\MacroTopsep\trivlist
-  \edef\saved@macroname{\string#2}%
-  \def\makelabel##1{\llap{##1}}%
-  \if@inlabel
-    \let\@tempa\@empty
-    \count@\macro@cnt
-    \loop\ifnum\count@>\z@
-      \edef\@tempa{\@tempa\hbox{\strut}}\advance\count@\m@ne%
-    \repeat
-    \edef\makelabel##1{%
-      \llap{\vtop to\baselineskip
-	{\@tempa\hbox{##1}\vss}}}%
-    \advance\macro@cnt\@ne
-  \else
-    \macro@cnt\@ne
-  \fi
-  \edef\@tempa{%
-    \noexpand\item[%
+    \endgroup%
+    \topsep\MacroTopsep%
+    \trivlist%
+      \edef\saved@macroname{\string#2}%
+      \def\makelabel##1{\llap{##1}}%
+      \if@inlabel%
+        \let\@tempa\@empty%
+        \count@\macro@cnt%
+        \loop\ifnum\count@>\z@%
+          \edef\@tempa{\@tempa\hbox{\strut}}\advance\count@\m@ne%
+        \repeat%
+      \edef\makelabel##1{\llap{\vtop to\baselineskip{\@tempa\hbox{##1}\vss}}}%
+      \advance\macro@cnt\@ne%
+    \else%
+      \macro@cnt\@ne%
+    \fi%
+    \edef\@tempa{%
+      \noexpand\item[%
 %    \end{macrocode}
 % That's the first modification:
 %    \begin{macrocode}
-      \expandafter\noexpand\csname Print#1Name\endcsname{\string#2}]}%
-  \@tempa
-  \global\advance\c@CodelineNo\@ne
+        \expandafter\noexpand\csname Print#1Name\endcsname{\string#2}]}%
+    \@tempa%
+    \global\advance\c@CodelineNo\@ne%
 %    \end{macrocode}
 % And that's the second one:
 %    \begin{macrocode}
-  \@nameuse{SpecialMain#1Index}{#2}\nobreak
-%  \endgroup
-  \global\advance\c@CodelineNo\m@ne
-  \ignorespaces}
-
+    \@nameuse{SpecialMain#1Index}{#2}\nobreak%
+    \global\advance\c@CodelineNo\m@ne%
+    \ignorespaces}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@doxenv}
+%   \marg{item}\oarg{options}\\
+%   Handle optional arguments and call \cs{@@doxenv}.
+%    \begin{macrocode}
 \def\@doxenv#1[#2]{%
   \begingroup%
     \setkeys{dox}{#2}%
@@ -209,8 +208,12 @@
 
 %    \end{macrocode}
 % \end{macro}
-% \begin{macro}{\@doxdescribe}
-%   \marg{item}\marg{name}
+%
+% \subsection{\dox descriptions}
+% \begin{macro}{\@@doxdescribe}
+%   \marg{item}\marg{name}\\
+%   The first closed group was the one opened to parse the \meta{name}
+%   argument. The second one was opened to handle local options.
 %    \begin{macrocode}
 \def\@@doxdescribe#1#2{%
     \endgroup%
@@ -222,7 +225,12 @@
     \fi%
     \endgroup%
   \@esphack\ignorespaces}
-
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@doxdescribe}
+%   \marg{item}\oarg{options}\\
+%   Handle optional arguments and call \cs{@@doxdescribe}.
+%    \begin{macrocode}
 \def\@doxdescribe#1[#2]{%
   \leavevmode\@bsphack%
   \begingroup%
@@ -235,6 +243,7 @@
 % \end{macro}
 %
 % \subsection{API creation}
+% The whole user interface is created in one macro call.
 % \begin{macro}{\doxitem}
 %   \marg{funcsname}\marg{singular}\marg{plural}
 %    \begin{macrocode}
@@ -271,23 +280,31 @@
     \index{#3:\levelchar##1\actualchar{\protect\ttfamily##1}\encapchar
       usage}\@esphack}
 %    \end{macrocode}
-% \begin{macro}{\Describe...}
-%   \marg{name}
+%   \paragraph{The \cs{Describe\ldots} macro} It calls \cs{@doxdescribe} after
+%   fixing the presence of optional arguments.
+%   \begin{macro}{\Describe...}
+%     \oarg{options}\marg{name}
 %    \begin{macrocode}
   \expandafter\def\csname Describe#1\endcsname{%
     \@ifnextchar[%]
     {\@doxdescribe{#1}}{\@doxdescribe{#1}[]}}
 %    \end{macrocode}
-% \end{macro}
-% The \meta{item} environment:
+%   \end{macro}
+%   \paragraph{The \meta{item} environment macros} The opening macro calls
+%   \cs{@doxenv} after fixing the presence of optional arguments. The
+%   closing macro first closes the group opened by \cs{@doxenv} for local
+%   options processing, and then closes the \texttt{trivlist} opened by
+%   \cs{@@doxenv}.
+%   \begin{environment}{item}
+%     \oarg{options}\marg{name}
 %    \begin{macrocode}
   \expandafter\def\csname #2\endcsname{%
     \@ifnextchar[%]
     {\@doxenv{#1}}{\@doxenv{#1}[]}}
   \expandafter\def\csname end#2\endcsname{\endgroup\endtrivlist}}
-
 %</dox>
 %    \end{macrocode}
+%   \end{environment}
 % \end{macro}
 % ^^A \PrintChanges
 % ^^A \PrintIndex
