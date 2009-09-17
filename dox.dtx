@@ -100,7 +100,7 @@
 %   functionality.
 % \end{abstract}
 %
-% ^^A \tableofcontents
+% \tableofcontents
 %
 % \section{Usage}
 % \begin{quotation}
@@ -110,7 +110,7 @@
 % \end{quotation}
 %
 % \subsection{Creating new documentation items}
-% \DescribeMacro{\doxitem}\marg{funcsname}\marg{singular}\marg{plural}\\
+% \DescribeMacro{\doxitem}\marg{name}\marg{envname}\marg{idxname}\\
 % \dox provides a command named \cs{doxitem} to create new documentation items
 % with functionalities equivalent to what \texttt{doc} provides for macros and
 % environments. Perhaps the simplest way to describe what it does is to give
@@ -139,6 +139,8 @@
 %   available in \texttt{doc}'s original macro and environment APIs, because
 %   \dox redefines them.
 % \end{quotation}
+%
+% \subsubsection{Additional (optional) argument}
 % Compared to \texttt{doc}, the APIs created by \cs{doxitem} are extended with
 % a first optional argument, so that, continuing with our initial example, the
 % real prototypes are in fact the following:
@@ -149,6 +151,8 @@
 % %% ...
 % \end{option}
 % \end{verbatim}
+%
+% \subsubsection{Available options}
 % The options currently supported are:
 % \begin{description}
 % \item[noprint] Avoid printing \meta{name} in the margin
@@ -164,6 +168,19 @@
 % referencing a lot of items close to each other, this may lead to a ``Too
 % many unprocessed floats'' error. With \dox, the \cs{marginpar} is avoided
 % altogether.
+%
+% \subsubsection{Global effect}
+% All options described in the previous section are also available to
+% \cs{usepackage}. Their effect then becomes global. Because these options are
+% boolean, it is still possible to counteract their global effect locally. For
+% instance, one could do:
+% \begin{verbatim}
+% \usepackage[noprint]{dox}
+% \end{verbatim}
+% and then later:
+% \begin{verbatim}
+% \DescribeOption[noprint=false]{french}
+% \end{verbatim}
 %
 %
 % \StopEventually{\vfill\hfill\small \packagecopyright{}.}
@@ -192,7 +209,7 @@
 %
 % \subsection{\dox environments}
 % \begin{macro}{\@@doxenv}
-%   \marg{item}\marg{contents}\\
+%   \marg{item}\marg{name}\\
 %   In \texttt{doc.sty}, the macro and environment environments go through the
 %   \cs{m@cro@} command which implements specific parts by testing a boolean
 %   condition as its first argument. This mechanism is not extensible, so I
@@ -248,7 +265,8 @@
 %   Hence, we need to reset the options at every call.
 %    \begin{macrocode}
 \def\@doxenv#1[#2]{%
-  \dox@noprintfalse\dox@noindexfalse%
+  \@nameuse{dox@noprint\dox@noprintdefault}%
+  \@nameuse{dox@noindex\dox@noindexdefault}%
   \setkeys{dox}{#2}%
   \begingroup%
     \catcode`\\12%
@@ -303,7 +321,7 @@
 %    \end{macrocode}
 % \end{macro}
 % \begin{macro}{\@doxcreateenv}
-%   \marg{item}\marg{funcname}
+%   \marg{item}\marg{envname}
 %    \begin{macrocode}
 \def\@doxcreateenv#1#2{%
   \expandafter\def\csname #2\endcsname{%
@@ -348,17 +366,20 @@
 % \subsection{API creation}
 % The whole user interface is created in one macro call.
 % \begin{macro}{\doxitem}
-%   \marg{funcsname}\marg{singular}\marg{plural}
+%   \marg{name}\marg{envname}\marg{idxname}
 %    \begin{macrocode}
 \newcommand\doxitem[3]{%
 %    \end{macrocode}
-% The \cs{Print}\meta{item}\texttt{Name} macro:
+%   \begin{macro}{\Print...Name}
+%     \marg{name}
 %    \begin{macrocode}
   \@ifundefined{Print#1Name}{%
     \expandafter\def\csname Print#1Name\endcsname##1{%
       \strut\MacroFont##1\ }}{}
 %    \end{macrocode}
-% The \cs{SpecialMain}\meta{item}\texttt{Index} macro:
+%   \end{macro}
+%   \begin{macro}{\SpecialMain...Index}
+%     \marg{name}
 %    \begin{macrocode}
   \expandafter\def\csname SpecialMain#1Index\endcsname##1{%
     \@bsphack%
@@ -369,13 +390,17 @@
       {\string\ttfamily\space##1}\encapchar main}%
     \@esphack}
 %    \end{macrocode}
-% The \cs{PrintDescribe}\meta{item} macro:
+%   \end{macro}
+%   \begin{macro}{\PrintDescribe...}
+%     \marg{name}
 %    \begin{macrocode}
   \@ifundefined{PrintDescribe#1}{%
     \expandafter\def\csname PrintDescribe#1\endcsname##1{%
       \strut\MacroFont##1\ }}{}
 %    \end{macrocode}
-% The \cs{Special}\meta{item}\texttt{Index} macro:
+%   \end{macro}
+%   \begin{macro}{\Special...Index}
+%     \marg{name}
 %    \begin{macrocode}
   \expandafter\def\csname Special#1Index\endcsname##1{\@bsphack
     \index{##1\actualchar{\protect\ttfamily##1}
@@ -383,27 +408,44 @@
     \index{#3:\levelchar##1\actualchar{\protect\ttfamily##1}\encapchar
       usage}\@esphack}
 %    \end{macrocode}
-%   \paragraph{The \cs{Describe\ldots} macro} It calls \cs{@doxdescribe} after
-%   fixing the presence of optional arguments.
+%   \end{macro}
 %   \begin{macro}{\Describe...}
 %     \oarg{options}\marg{name}
 %    \begin{macrocode}
   \@doxcreatedescribe{#1}
 %    \end{macrocode}
 %   \end{macro}
-%   \paragraph{The \meta{item} environment macros} The opening macro calls
-%   \cs{@doxenv} after fixing the presence of optional arguments. The
-%   closing macro closes the \texttt{trivlist} opened by \cs{@@doxenv}.
 %   \begin{environment}{item}
 %     \oarg{options}\marg{name}
 %    \begin{macrocode}
   \@doxcreateenv{#1}{#2}}
-%</dox>
+
 %    \end{macrocode}
 %   \end{environment}
 % \end{macro}
+%
+% \subsection{Finale}
+% We need to save the default value for every option because \dox environments
+% need to reset them at every call.
+%    \begin{macrocode}
+\ProcessKeyvalOptions*
+\ifdox@noprint
+  \def\dox@noprintdefault{true}
+\else
+  \def\dox@noprintdefault{false}
+\fi
+\ifdox@noindex
+  \def\dox@noindexdefault{true}
+\else
+  \def\dox@noindexdefault{false}
+\fi
+
+%</dox>
+%    \end{macrocode}
 % ^^A \PrintChanges
-% ^^A \PrintIndex
+% ^^A Nobody messes up with the marks in this document, but \index@prologue.
+% ^^A That sucks.
+% ^^A \makeatletter{\let\markboth\@gobbletwo\PrintIndex}\makeatother
 % \Finale
 %
 % ^^A dox.dtx ends here
