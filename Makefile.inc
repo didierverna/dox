@@ -15,6 +15,7 @@
 
 ### Code:
 
-TEXMFDIR = ${HOME}/.texmf
+TEXMFDIR  = ${HOME}/.texmf
+AUCTEXDIR = ${HOME}/etc/auctex
 
 ### Makefile.inc ends here
