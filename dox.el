@@ -33,7 +33,9 @@
 (TeX-add-style-hook "dox"
   (function
    (lambda ()
-     (TeX-add-symbols '("doxitem" "Functions name" "singular" "plural")))))
+     (TeX-add-symbols
+      '("doxitem" [("Options" "idxtype=")]
+	"Function name" "Environment name" "Index category name")))))
 
 
 
