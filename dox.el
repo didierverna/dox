@@ -34,7 +34,7 @@
   (function
    (lambda ()
      (TeX-add-symbols
-      '("doxitem" [("Options" "idxtype=")]
+      '("doxitem" [ "Options" ]
 	"Function name" "Environment name" "Index category name")))))
 
 
