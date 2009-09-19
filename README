@@ -46,14 +46,14 @@ steps in order to extract the necessary files:
 [pdf]latex dox.dtx 
 [pdf]latex dox.dtx 
 
-After that, you need to install the generated documentation and style files to
+After that, you need to install the generated documentation and style file to
 a location where LaTeX can find them. For a TDS-compliant layout, the
 following locations are suggested:
 
 [TEXMF]/tex/latex/dox/dox.sty 
 [TEXMF]/doc/latex/dox/dox.[pdf|dvi] 
 
-If you're an AUC-TeX user, you can also install the file `dox.el' in a
+If you're an AUC-TeX user, you may also install the file 'dox.el' in a
 suitable AUC-TeX style directory.
 
 
