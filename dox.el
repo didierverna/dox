@@ -5,7 +5,7 @@
 ;; Author:        Didier Verna <didier@lrde.epita.fr>
 ;; Maintainer:    Didier Verna <didier@lrde.epita.fr>
 ;; Created:       Fri Sep 11 11:24:16 2009
-;; Last Revision: Fri Sep 11 11:26:28 2009
+;; Last Revision: Sat Sep 19 09:54:43 2009
 ;; Keywords:      tex abbrev data
 
 

@@ -7,7 +7,7 @@
 % Author:        Didier Verna <didier@lrde.epita.fr>
 % Maintainer:    Didier Verna <didier@lrde.epita.fr>
 % Created:       Thu Sep 10 21:11:32 2009
-% Last Revision: Fri Sep 11 11:20:13 2009
+% Last Revision: Sat Sep 19 09:55:31 2009
 %
 % This file is part of DoX.
 %
@@ -102,7 +102,7 @@
 %   items (options or counters for instance). \dox is designed to circumvent
 %   this limitation, and provides some improvements over the existing
 %   functionality as well.
-
+%
 %   The \dox package is \packagecopyright{}, and distributed under the
 %   terms of the LPPL license.
 % \end{abstract}
@@ -269,6 +269,18 @@
 % \section{Conclusion}
 % If you want to see \dox in action, take a look at the documentation of the
 % \textsf{FiXme} package. In fact, I wrote \dox for it in the first place.
+%
+% \section{History}
+% \begin{itemize}
+% \item[v2.0] Optional argument to \cs{doxitem} (\texttt{idxtype} option to
+%   change the item's index type).\\
+%   Optional argument to \cs{Describe}\meta{Item} and the \meta{item}
+%   environment (\texttt{noprint} to avoid marginal printing and
+%   \texttt{noindex} to avoid indexing).\\
+%   Extend \cs{DescribeMacro}, \cs{DescribeEnv} and their corresponding
+%   environments with the same features.
+% \item[v1.0] First public version
+% \end{itemize}
 %
 % \StopEventually{\vfill\hfill\small \packagecopyright{}.}
 %

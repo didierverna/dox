@@ -28,31 +28,42 @@ DoX consists of the following files:
 =============
 
 The doc package provides LaTeX developers with means to describe the usage and
-the definition of new macros and environments. However, there is no simple way
-to extend this functionality to other items (options or counters for
-instance). The DoX package is designed to circumvent this limitation. DoX also
-comes with support for AUC-TeX.
+the definition of new commands and environments. However, there is no simple
+way to extend this functionality to other items (options or counters for
+instance). DoX is designed to circumvent this limitation, and provides some
+improvements over the existing functionality as well.
+
+DoX homepage: http://www.lrde.epita.fr/~didier/software/latex.php#dox
 
 
 * Installation
 ==============
 
-	To install the package, please follow these steps:
+If you are building DoX from the tarball you need to execute the following
+steps in order to extract the necessary files: 
 
-- Run LaTeX on the file `dox.ins' to create the style file `dox.sty'.
-- Run LaTeX on the file `dox.dtx' to create the documentation.
-- Install these files anywhere you see fit.
+[pdf]latex dox.ins 
+[pdf]latex dox.dtx 
+[pdf]latex dox.dtx 
 
-	If you're an AUC-TeX user, you can also install the file `dox.el' in
-a suitable AUC-TeX style directory.
+After that, you need to install the generated documentation and style files to
+a location where LaTeX can find them. For a TDS-compliant layout, the
+following locations are suggested:
+
+[TEXMF]/tex/latex/dox/dox.sty 
+[TEXMF]/doc/latex/dox/dox.[pdf|dvi] 
+
+If you're an AUC-TeX user, you can also install the file `dox.el' in a
+suitable AUC-TeX style directory.
+
 
 	Have fun!
 
 --
-Didier Verna, didier@lrde.epita.fr, http://www.lrde.epita.fr/~didier
+Didier Verna <didier@lrde.epita.fr>
 
-EPITA / LRDE, 14-16 rue Voltaire   Tel.+33 (0)1 44 08 01 85
-94276 Le Kremlin-Bicêtre, France   Fax.+33 (0)1 53 14 59 22
+Sientific site:    http://www.lrde.epita.fr/~didier
+Music (Jazz) site: http://www.didierverna.com
 
 
 
