@@ -80,6 +80,8 @@
 % \newcommand\packagecopyright{%
 %   Copyright \copyright{} 2009 Didier Verna}
 %
+% \newcommand\emacs{\textsf{[X]Emacs}\xspace}
+% \newcommand\auctex{AUC-\TeX\xspace}
 % \newcommand\api{\textsc{api}\xspace}
 %
 % \pagestyle{mystyle}
@@ -100,21 +102,51 @@
 %   items (options or counters for instance). \dox is designed to circumvent
 %   this limitation, and provides some improvements over the existing
 %   functionality as well.
+
+%   The \dox package is \packagecopyright{}, and distributed under the
+%   terms of the LPPL license.
 % \end{abstract}
 %
 % \tableofcontents
 %
-% \section{Requirements}
-% \dox currently requires the \texttt{kvoptions} package.
+% \section{Installation}
+% \subsection{Extraction}
+% If you are building \dox from the tarball you need to execute the following
+% steps in order to extract the necessary files:
+% \begin{verbatim}
+% [pdf]latex dox.ins
+% [pdf]latex dox.dtx
+% [pdf]latex dox.dtx
+% \end{verbatim}
+% After that, you need to install the generated documentation and style files
+% to a location where \LaTeX{} can find them.
+%
+% \subsection{TDS-compliant layout}
+% For a TDS-compliant layout, the following locations are suggested:
+% \begin{verbatim}
+% [TEXMF]/tex/latex/dox/dox.sty
+% [TEXMF]/doc/latex/dox/dox.[pdf|dvi]
+% \end{verbatim}
+%
+% \subsection{\auctex support}
+% \auctex is a powerful major mode for editing \TeX{} documents in \emacs. In
+% particular, it provides automatic completion of command names once they are
+% known. \dox supports \auctex by providing a style file named \texttt{dox.el}
+% which contains \auctex definitions for the relevant commands. This file
+% should be installed in a place where \auctex can find it. Please refer to
+% the \auctex documentation for more information on this.
+%
 %
 % \section{Usage}
+% \subsection{Requirements}
+% \dox currently requires the \texttt{kvoptions} package.
+%
+% \subsection{Creating new documentation items}
 % \begin{quotation}
 %   \emph{\textbf{Note}: we assume that you know about \texttt{doc}'s
 %   \cs{DescribeMacro}, \cs{DescribeEnv} and all other associated commands and
 %   environments}.
 % \end{quotation}
-%
-% \subsection{Creating new documentation items}
 % \DescribeMacro{\doxitem}
 % \oarg{options}\marg{name}\marg{envname}\marg{idxcat}\\
 % \dox provides a command named \cs{doxitem} to create new documentation items
