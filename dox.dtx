@@ -138,8 +138,17 @@
 %
 %
 % \section{Usage}
-% \subsection{Requirements}
-% \dox currently requires the \texttt{kvoptions} package.
+% \subsection{Initialization}
+% \subsubsection{Requirements}
+% In order to work properly, \dox requires the presence of some \LaTeX{}
+% packages. You don't have to load them explicitly though. As long as
+% \LaTeX{} can locate them, they will be used automatically. \dox currently
+% depends on \texttt{kvoptions}.
+%
+% \subsubsection{Loading the package}
+% In order to load \dox, simply say |\usepackage[|\meta{options}|]{dox}|
+% in the preamble of your document. The package options will be discussed when
+% appropriate.
 %
 % \subsection{Creating new documentation items}
 % \begin{quotation}
@@ -268,7 +277,8 @@
 %
 % \section{Conclusion}
 % If you want to see \dox in action, take a look at the documentation of the
-% \textsf{FiXme} package. In fact, I wrote \dox for it in the first place.
+% \textsf{FiXme} package (version 4.0 or later). In fact, I wrote \dox for it
+% in the first place.
 %
 % \section{History}
 % \begin{itemize}
@@ -284,7 +294,6 @@
 %
 % \StopEventually{\vfill\hfill\small \packagecopyright{}.}
 %
-% \appendix
 % \section{Implementation}
 % \subsection{Preamble}
 %    \begin{macrocode}
