@@ -37,6 +37,30 @@
       '("doxitem" [ "Options" ]
 	"Function name" "Environment name" "Index category name")))))
 
+(defun doxitem (envname)
+  "Register a new environment ENVNAME with AUC-TeX.
+
+The effect is to make docTeX mode treat this new environment just like
+the macro and environment ones. Currently, this means avoiding inner
+indentation.
+
+ENVNAME is actually a regexp appearing in a logical group.
+This means that you can register several environments simultaneously
+by means or regexp combination."
+  (push (list
+	 (concat (regexp-quote TeX-esc)
+		 "\\(begin\\|end\\)[ \t]*{\\("
+		 envname
+		 "\\)\\*?}")
+	 0 nil)
+	docTeX-indent-inner-fixed))
+
+(defun doxitems (&rest envnames)
+  "Register environments ENVNAMES with AUC-TeX.
+See the function `doxitem' for more information."
+  (mapc #'doxitem envnames))
+
+
 
 
 ;;; Local variables:
