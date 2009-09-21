@@ -18,7 +18,6 @@ DoX consists of the following files:
 
 - README (this file)
 - NEWS
-- THANKS
 - dox.ins
 - dox.dtx
 - dox.el
