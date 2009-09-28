@@ -277,6 +277,36 @@
 % \DescribeOption[noprint=false]{french}
 % \end{verbatim}
 %
+% \section{\auctex support for new documentation items}
+% Recent versions of \auctex (in fact, \texttt{doc}\TeX{} mode) are aware of
+% the \texttt{macro} and \texttt{environment} environments and give them a
+% fixed indentation level of $0$, meaning no indentation at all even when they
+% are nested. This is considered more convenient than the usual indentation
+% for environments when editing \texttt{dtx} files. If you have created new
+% documentation items for your package, you may want to let them behave the
+% same way. For that, the \dox style file provides two Lisp functions to let
+% \auctex know of your new environments: \texttt{doxitem} and
+% \texttt{doxitems}. The first one registers a new environment by name with
+% \auctex, and the second one takes an arbitrary number of environment names
+% and does the same with them. The environment names can in fact be a regular
+% expression, allowing you to combine several names together or build complex
+% ones.
+%
+% Since these functions are located in the style file itself, a good place to
+% use them is in \texttt{TeX-update-style-hook} which will be called after the
+% file is parsed and the relevant style files applied. Note that the effect of
+% calling these functions is always buffer-local.
+%
+% Here is an example to make all of this clearer. The following code sample is
+% what I have at the end of \texttt{fixme.dxt} (another package of mine), in
+% the local variables section:
+% \begin{verbatim}
+% (add-hook 'TeX-update-style-hook
+%   (lambda () (doxitems "option" "counter" "lang" "face" "color")) nil t)
+% (add-hook 'TeX-update-style-hook
+%   (lambda () (doxitem "\\(env\\|target\\)?layout")) nil t)
+% \end{verbatim}
+%
 % \section{Conclusion}
 % If you want to see \dox in action, take a look at the documentation of the
 % \textsf{FiXme} package (version 4.0 or later). In fact, I wrote \dox for it
