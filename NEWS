@@ -17,6 +17,12 @@ version 1999/06/01 or later.
 DoX consists of the files listed in the file `README'.
 
 
+* Version 2.1
+=============
+** New lisp functions doxitem[s]
+to register new documentation environments with AUC-TeX.
+
+
 * Version 2.0
 =============
 ** Optional argument to \doxitem
