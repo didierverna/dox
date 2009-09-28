@@ -47,6 +47,7 @@ indentation.
 ENVNAME is actually a regexp appearing in a logical group.
 This means that you can register several environments simultaneously
 by means or regexp combination."
+  (make-local-variable 'docTeX-indent-inner-fixed)
   (push (list
 	 (concat (regexp-quote TeX-esc)
 		 "\\(begin\\|end\\)[ \t]*{\\("
