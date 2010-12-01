@@ -2,7 +2,7 @@
 				  ABOUT DOX
 
 
-Copyright (C) 2009 Didier Verna
+Copyright (C) 2009, 2010 Didier Verna
 
 This file is part of DoX.
 
@@ -16,11 +16,11 @@ version 1999/06/01 or later.
 
 DoX consists of the following files:
 
-- README (this file)
 - NEWS
-- dox.ins
+- README (this file)
 - dox.dtx
 - dox.el
+- dox.ins
 
 
 * Description
@@ -41,9 +41,10 @@ DoX homepage: http://www.lrde.epita.fr/~didier/software/latex.php#dox
 If you are building DoX from the tarball you need to execute the following
 steps in order to extract the necessary files: 
 
-[pdf]latex dox.ins 
-[pdf]latex dox.dtx 
-[pdf]latex dox.dtx 
+[pdf]latex dox.ins -> will create the style file dox.sty
+[pdf]latex dox.dtx -> (twice) will create the documentation files dox.pdf or
+                      dox.dvi. Note that dox.pdf is already part of the
+                      distribution. 
 
 After that, you need to install the generated documentation and style file to
 a location where LaTeX can find them. For a TDS-compliant layout, the
