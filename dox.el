@@ -1,6 +1,6 @@
 ;;; dox.el --- AUC-TeX style file for DoX
 
-;; Copyright (C) 2009 Didier Verna.
+;; Copyright (C) 2009, 2010 Didier Verna
 
 ;; Author:        Didier Verna <didier@lrde.epita.fr>
 ;; Maintainer:    Didier Verna <didier@lrde.epita.fr>
