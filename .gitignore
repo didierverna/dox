@@ -1,0 +1,9 @@
+Makefile
+version.sh
+ltxpkg.tex
+header.inc
+
+dox.sty
+dox.pdf
+
+dox.mak
