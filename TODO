@@ -1,0 +1,11 @@
+* Provide an optional argument to doxitem to make the new documentation item
+accept macros as arguments. This could be useful if you want to define a
+"length" item for instance, because length are macros.
+
+[ or simply allow balckslashes ? ]
+
+* Implement alternative environments for empty contents: add an \mbox{} and
+set \MacroTopsep=0pt
+
+* Fix the noprint option for environments, which still eats marginal vertical
+space.
