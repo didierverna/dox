@@ -551,6 +551,7 @@
 %   \oarg{options}\marg{name}\marg{envname}\marg{idxcat}
 %    \begin{macrocode}
 \newcommand\doxitem[4][]{%
+  \@nameuse{dox@macrolike\dox@macrolikedefault}%
   \def\dox@idxtype{#3}%
   \setkeys{dox}{#1}
 %    \end{macrocode}
@@ -558,8 +559,13 @@
 %     \marg{name}
 %    \begin{macrocode}
   \@ifundefined{Print#2Name}{%
-    \expandafter\def\csname Print#2Name\endcsname##1{%
-      \strut\MacroFont##1\ }}{}
+    \ifdox@macrolike
+      \expandafter\def\csname Print#2Name\endcsname##1{%
+        \strut\MacroFont\string ##1\ }
+    \else
+      \expandafter\def\csname Print#2Name\endcsname##1{%
+        \strut\MacroFont ##1\ }
+    \fi}{}
 %    \end{macrocode}
 %   \end{macro}
 %   \begin{macro}{\SpecialMain...Index}
@@ -573,8 +579,13 @@
 %     \marg{name}
 %    \begin{macrocode}
   \@ifundefined{PrintDescribe#2}{%
-    \expandafter\def\csname PrintDescribe#2\endcsname##1{%
-      \strut\MacroFont##1\ }}{}
+    \ifdox@macrolike
+      \expandafter\def\csname PrintDescribe#2\endcsname##1{%
+        \strut\MacroFont\string ##1\ }
+    \else
+      \expandafter\def\csname PrintDescribe#2\endcsname##1{%
+        \strut\MacroFont ##1\ }
+    \fi}{}
 %    \end{macrocode}
 %   \end{macro}
 %   \begin{macro}{\Special...Index}
