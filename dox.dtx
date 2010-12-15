@@ -465,34 +465,47 @@
 % \subsection{API construction}
 % \begin{macro}{\@doxcreatespecialmainindex}
 %   \marg{item}\marg{idxtype}\marg{idxcat}
-%    \begin{macrocode}
-\def\@doxcreatespecialmainindex#1#2#3{%
-  \expandafter\def\csname SpecialMain#1Index\endcsname##1{%
-    \@bsphack%
-    \special@index{%
-      ##1\actualchar{\string\ttfamily\space##1} (#2)\encapchar main}%
-    \special@index{%
-      #3:\levelchar##1\actualchar%
-      {\string\ttfamily\space##1}\encapchar main}%
-    \@esphack}}
-
-%    \end{macrocode}
-% \end{macro}
-% \begin{macro}{\@doxcreatespecialindex}
-%   \marg{item}\marg{idxtype}\marg{idxcat}
-% \begin{macro}{\@doxcreatespecialmacrolikeindex}
+% \begin{macro}{\@doxcreatespecialmainmacrolikeindex}
 %   \marg{item}\marg{idxtype}\marg{idxcat}\\
 %   The ``macrolike'' version does something similar to |doc|'s
 %   \cs{SpecialIndex@} macro, but simplified. Let's just hope nobody will ever
 %   define \verb*|\ | or nonletter macros as macrolike \dox items\ldots
 %    \begin{macrocode}
+\def\@doxcreatespecialmainindex#1#2#3{%
+  \expandafter\def\csname SpecialMain#1Index\endcsname##1{%
+    \@bsphack%
+    \special@index{##1\actualchar{\string\ttfamily\space##1} (#2)
+      \encapchar main}%
+    \special@index{#3:\levelchar##1\actualchar{\string\ttfamily\space##1}
+      \encapchar main}%
+    \@esphack}}
+\def\@doxcreatespecialmainmacrolikeindex#1#2#3{%
+  \expandafter\def\csname SpecialMain#1Index\endcsname##1{%
+    \@SpecialIndexHelper@##1\@nil
+    \@bsphack%
+    \special@index{\@gtempa\actualchar
+      \string\verb\quotechar*\verbatimchar\bslash\@gtempa\verbatimchar
+      \space(#2)\encapchar main}%
+    \special@index{#3:\levelchar\@gtempa\actualchar%
+      \string\verb\quotechar*\verbatimchar\bslash\@gtempa\verbatimchar
+      \encapchar main}%
+    \@esphack}}
+
+%    \end{macrocode}
+% \end{macro}
+% \end{macro}
+% \begin{macro}{\@doxcreatespecialindex}
+%   \marg{item}\marg{idxtype}\marg{idxcat}
+% \begin{macro}{\@doxcreatespecialmacrolikeindex}
+%   \marg{item}\marg{idxtype}\marg{idxcat}\\
+%   Same comment as above.
+%    \begin{macrocode}
 \def\@doxcreatespecialindex#1#2#3{%
   \expandafter\def\csname Special#1Index\endcsname##1{%
     \@bsphack%
-    \index{##1\actualchar{\protect\ttfamily##1}
-      (#2)\encapchar usage}%
-    \index{#3:\levelchar##1\actualchar{\protect\ttfamily##1}\encapchar
-      usage}%
+    \index{##1\actualchar{\protect\ttfamily##1} (#2)\encapchar usage}%
+    \index{#3:\levelchar##1\actualchar{\protect\ttfamily##1}
+      \encapchar usage}%
     \@esphack}}
 \def\@doxcreatespecialmacrolikeindex#1#2#3{%
   \expandafter\def\csname Special#1Index\endcsname##1{%
@@ -588,7 +601,11 @@
 %   \begin{macro}{\SpecialMain...Index}
 %     \marg{name}
 %    \begin{macrocode}
-  \def\@doxexpr{\@doxcreatespecialmainindex{#2}}%
+  \ifdox@macrolike
+    \def\@doxexpr{\@doxcreatespecialmainmacrolikeindex{#2}}%
+  \else
+    \def\@doxexpr{\@doxcreatespecialmainindex{#2}}%
+  \fi
   \expandafter\@doxexpr\expandafter{\dox@idxtype}{#4}%
 %    \end{macrocode}
 %   \end{macro}
