@@ -49,7 +49,7 @@
 % \fi
 %
 % \catcode`\¡=14
-% \CheckSum{247}
+% ^^A\CheckSum{247}
 % \GetFileInfo{dox.inc}
 %% \CharacterTable
 %%  {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
@@ -350,7 +350,11 @@
 \DeclareBoolOption{noprint}
 \DeclareBoolOption{noindex}
 %    \end{macrocode}
-% This one is for \cs{doxitem} only:
+% This one is for \cs{usepackage} and \cs{doxitem}:
+%    \begin{macrocode}
+\DeclareBoolOption{macrolike}
+%    \end{macrocode}
+% This one is for \cs{doxitem}:
 %    \begin{macrocode}
 \DeclareStringOption{idxtype}
 
@@ -609,6 +613,11 @@
   \def\dox@noindexdefault{true}
 \else
   \def\dox@noindexdefault{false}
+\fi
+\ifdox@macrolike
+  \def\dox@macrolikedefault{true}
+\else
+  \def\dox@macrolikedefault{false}
 \fi
 
 %</dox>
