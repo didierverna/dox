@@ -167,8 +167,8 @@
 %
 % \subsubsection{Example}
 % Perhaps the simplest way to describe what it does is to give an example.
-% Suppose you would like to describe package options. Here is what you need to
-% do:
+% Suppose you would like to describe package options explicitely. Here is what
+% you need to do:
 % \begin{verbatim}
 % \usepackage{dox}
 % \doxitem{Option}{option}{options}
@@ -208,25 +208,50 @@
 %
 % \subsubsection{Options to \cs{doxitem}}
 % The first (optional) argument to \cs{doxitem} may contain a comma-separated
-% list of options. Currently, there is only one supported option:
-% \texttt{idxtype}.
+% list of options. The following ones are currently implemented.
+% \begin{description}
+% \item[\texttt{idxtype}]~\\
+%   We saw earlier that individual items appear under the \texttt{idxcat}
+%   index entry, but items also appear as standalone index entries,
+%   alphabetically sorted with their type in parenthesis. For instance, the
+%   \texttt{final} option would appear like this under the \texttt{F} index
+%   entry: \mbox{``\texttt{final} (option)''}.
 %
-% We saw earlier that individual items appear under the \texttt{idxcat} index
-% entry, but items also appear as standalone index entries, alphabetically
-% sorted with their type in parenthesis. For instance, the \texttt{final}
-% option would appear like this under the \texttt{F} index entry:
-% \mbox{``\texttt{final} (option)''}.
+%   By default, the index type is the same as the environment's name (the
+%   \meta{envname} argument). However, you can change this by providing a
+%   value to the \texttt{idxtype} option.
 %
-% By default, the index type is the same as the environment's name (the
-% \meta{envname} argument). However, you can change this by providing a value
-% to the \texttt{idxtype} option.
-%
-% For instance, you may find the word ``environment'' too long for an index
-% type. In that case, you may redefine the \texttt{environment} \api like
-% this:
+%   For instance, you may find the word ``environment'' too long for an index
+%   type. In that case, you may redefine the \texttt{environment} \api like
+%   this:
 % \begin{verbatim}
 % \doxitem[idxtype=env.]{Env}{environment}{environments}
 % \end{verbatim}
+% \item[\texttt{macrolike}]~\\
+%   At some point, you may find that the ``macro'' category is too gross, and
+%   whish to further split it into different documentation items. A typical
+%   example of this would be to provide a specific category for \LaTeX{}
+%   lengths.
+%
+%   The difference with options or counters is that the names of your items
+%   are actually control sequences, and so they need to be typeset and indexed
+%   in a specific way.
+%
+%   As of version 2.2, \dox provides a \texttt{macrolike} boolean option which
+%   instructs \cs{doxitem} to create new documentation items expecting control
+%   sequences instead of plain text names. If you want to create explicit
+%   documentation for lengths for instance, you can do this:
+% \begin{verbatim}
+% \doxitem[macrolike,idxtype=len.]{Length}{length}{lengths}
+% \end{verbatim}
+%   In turn this allows you do write things like that:
+% \begin{verbatim}
+% \DescribeLength{\partopsep}
+% \begin{length}{\partopsep}
+%   ...
+% \end{length}
+% \end{verbatim}
+% \end{description}
 %
 % \subsection{Improvements over \texttt{doc}'s original \api}
 % \begin{quotation}\itshape
@@ -266,10 +291,10 @@
 % altogether.
 %
 % \subsubsection{Global effect}
-% All options described in the previous section are also available to
-% \cs{usepackage}. Their effect then becomes global. Because these options are
-% boolean, it is still possible to counteract their global effect locally. For
-% instance, one could do:
+% The \texttt{macrolike}, \texttt{noprint} and \texttt{noindex} options are
+% also available to \cs{usepackage}. Their effect then becomes global. Because
+% these options are boolean, it is still possible to counteract their global
+% effect locally. For instance, one could do:
 % \begin{verbatim}
 % \usepackage[noprint]{dox}
 % \end{verbatim}
@@ -289,8 +314,8 @@
 % \auctex know of your new environments: \texttt{doxitem} and
 % \texttt{doxitems}. The first one registers a new environment by name with
 % \auctex, and the second one takes an arbitrary number of environment names
-% and does the same with them. The environment names can in fact be a regular
-% expression, allowing you to combine several names together or build complex
+% and does the same with them. The environment names can in fact be regular
+% expressions, allowing you to combine several names together or build complex
 % ones.
 %
 % Since these functions are located in the style file itself, a good place to
