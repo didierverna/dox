@@ -338,10 +338,12 @@
 % \textsf{FiXme} package (version 4.0 or later). In fact, I wrote \dox for it
 % in the first place.
 %
-% \section{History}
+% \section{Changes}
 % \begin{itemize}
-%   \item[v2.1] New lisp functions |doxitem[s]| to register new documentation
-%     environments with \auctex.
+% \item[v2.2] New \texttt{macrolike} option allowing to create control
+%   sequence based documentation items.
+% \item[v2.1] New lisp functions |doxitem[s]| to register new documentation
+%   environments with \auctex.
 % \item[v2.0] Optional argument to \cs{doxitem} (\texttt{idxtype} option to
 %   change the item's index type).\\
 %   Optional argument to \cs{Describe}\meta{Item} and the \meta{item}
@@ -593,7 +595,7 @@
 %
 % \subsubsection{Environment facilities}
 % Making \cs{DescribeEnv} and the \texttt{environment} environment work the
-% \dox way is straightforward.
+% \dox way is even more straightforward.
 %    \begin{macrocode}
 \@doxcreatedescribe{Env}
 \@doxcreateenv{Env}{environment}
