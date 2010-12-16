@@ -2,7 +2,7 @@
 			     WHAT'S NEW IN DOX
 
 
-Copyright (C) 2009 Didier Verna
+Copyright (C) 2009, 2010 Didier Verna
 
 This file is part of DoX.
 
@@ -15,6 +15,12 @@ and version 1.1 or later is part of all distributions of LaTeX
 version 1999/06/01 or later.
 
 DoX consists of the files listed in the file `README'.
+
+
+* Version 2.2
+=============
+** New option 'macrolike' to \doxitem
+allowing to create control sequence based documentation items.
 
 
 * Version 2.1
