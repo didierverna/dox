@@ -387,13 +387,23 @@
 %   parts by testing a boolean condition as its first argument. This mechanism
 %   is not extensible, so I have to hack away a more generic version that
 %   would work for any new \texttt{dox} item, only which looks pretty much
-%   like the original one.
+%   like the original one (with the addition of options management).
 %    \begin{macrocode}
 \long\def\@@doxenv#1#2{%
   \endgroup%
   \topsep\MacroTopsep%
   \trivlist%
     \edef\saved@macroname{\string#2}%
+%    \end{macrocode}
+% Since version 2.1g, Doc creates a \cs{saved@indexname} command which in used
+% by \cs{changes}. We now support that as well. The expansion of this command
+% depends on whether the documented item is macrolike or not, which we don't
+% know here (it's only know by \cs{doxitem}). That's why we need one specific
+% command generating \cs{saved@indexname} the right way for every single
+% item. These commands are named\cs{@Save\meta{item}IndexName}; they are
+% technically part of the generated API, only not meant for public use.
+%    \begin{macrocode}
+    \@nameuse{@Save#1IndexName}{\saved@macroname}%
     \def\makelabel##1{\llap{##1}}%
     \if@inlabel%
       \let\@tempa\@empty%
@@ -412,8 +422,8 @@
       \edef\@tempa{%
         \noexpand\item[%
 %    \end{macrocode}
-% Apart from dependency on options, the first modification to the original
-% macro involves dynamically constructing the name of the print macro:
+% The second notable modification to the original macro involves dynamically
+% constructing the name of the print macro:
 %    \begin{macrocode}
         \expandafter\noexpand\csname Print#1Name\endcsname{\saved@macroname}]}%
       \@tempa%
@@ -421,7 +431,7 @@
     \ifdox@noindex\else%
       \global\advance\c@CodelineNo\@ne%
 %    \end{macrocode}
-% and the second one involves dynamically constructing the name of the index
+% and the third one involves dynamically constructing the name of the index
 % macro:
 %    \begin{macrocode}
       \@nameuse{SpecialMain#1Index}{#2}\nobreak%
@@ -482,6 +492,22 @@
 % \end{macro}
 %
 % \subsection{API construction}
+% First, the two index name generation macros (macrolike or not).
+% \begin{macro}{\@doxsavemacrolikeindexname}
+%   \marg{saved macro name}
+%    \begin{macrocode}
+\def\@doxsavemacrolikeindexname#1{%
+  \edef\saved@indexname{\expandafter\@gobble#1}}
+%    \end{macrocode}
+% \end{macro}
+% \begin{macro}{\@doxsaveindexname}
+%   \marg{saved macro name}
+%    \begin{macrocode}
+\def\@doxsaveindexname#1{\let\saved@indexname#1}
+
+%    \end{macrocode}
+% \end{macro}
+%
 % \begin{macro}{\@doxcreatespecialmainindex}
 %   \marg{item}\marg{idxtype}\marg{idxcat}
 % \begin{macro}{\@doxcreatespecialmainmacrolikeindex}
@@ -581,6 +607,7 @@
 \def\SpecialMainMacroIndex#1{%
   \SpecialMainIndex{#1}\nobreak%
   \DoNotIndex{#1}}
+\let\@SaveMacroIndexName\@doxsavemacrolikeindexname
 \@doxcreateenv{Macro}{macro}
 
 %    \end{macrocode}
@@ -591,6 +618,7 @@
 %    \begin{macrocode}
 \@doxcreatedescribe{Env}
 \@doxcreateenv{Env}{environment}
+\let\@SaveEnvIndexName\@doxsaveindexname
 
 %    \end{macrocode}
 %
@@ -661,10 +689,20 @@
 %   \begin{environment}{item}
 %     \oarg{options}\marg{name}
 %    \begin{macrocode}
-  \@doxcreateenv{#2}{#3}}
+  \@doxcreateenv{#2}{#3}
 
 %    \end{macrocode}
 %   \end{environment}
+% \begin{macro}{\@Ssave...IndexName}
+%    \begin{macrocode}
+  \ifdox@macrolike
+    \expandafter\let\csname @Save#2IndexName\endcsname%
+      \@doxsavemacrolikeindexname%
+  \else
+    \expandafter\let\csname @Save#2IndexName\endcsname\@doxsaveindexname%
+  \fi}
+%    \end{macrocode}
+% \end{macro}
 % \end{macro}
 %
 % \subsection{Finale}
