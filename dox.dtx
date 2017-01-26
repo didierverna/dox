@@ -395,13 +395,14 @@
   \trivlist%
     \edef\saved@macroname{\string#2}%
 %    \end{macrocode}
-% Since version 2.1g, Doc creates a \cs{saved@indexname} command which in used
-% by \cs{changes}. We now support that as well. The expansion of this command
-% depends on whether the documented item is macrolike or not, which we don't
-% know here (it's only know by \cs{doxitem}). That's why we need one specific
-% command generating \cs{saved@indexname} the right way for every single
-% item. These commands are named\cs{@Save\meta{item}IndexName}; they are
-% technically part of the generated API, only not meant for public use.
+% Since version 2.1g, \texttt{doc} creates a \cs{saved@indexname} command
+% which in used by \cs{changes}. We now support that as well. The expansion of
+% this command depends on whether the documented item is macrolike or not,
+% which we don't know here (it's only know by \cs{doxitem}). That's why we
+% need one specific command generating \cs{saved@indexname} the right way for
+% every single item. These commands are named\cs{@Save\meta{item}IndexName};
+% they are technically part of the generated API, only not meant for public
+% use.
 %    \begin{macrocode}
     \@nameuse{@Save#1IndexName}{\saved@macroname}%
     \def\makelabel##1{\llap{##1}}%
