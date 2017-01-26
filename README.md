@@ -20,6 +20,7 @@ DoX consists of the following files:
 - dox.ins
 - dox.dtx
 - dox.el
+- THANKS
 
 
 Description
