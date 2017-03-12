@@ -31,7 +31,7 @@ the definition of new commands and environments. However, there is no simple
 way to extend this functionality to other items (options or counters for
 instance). DoX is designed to circumvent this limitation, and provides some
 improvements over the existing functionality as well. Dox also comes with
-support for [AUC-TeX](https://www.gnu.org/software/auctex/).
+support for [AUCTeX](https://www.gnu.org/software/auctex/).
 
 DoX homepage: http://www.lrde.epita.fr/~didier/software/latex.php#dox
 
@@ -52,5 +52,5 @@ following locations are suggested:
 	[TEXMF]/tex/latex/dox/dox.sty
 	[TEXMF]/doc/latex/dox/dox.[pdf|dvi]
 
-If you're an AUC-TeX user, you may also install the file `dox.el` in a
-suitable AUC-TeX style directory.
+If you're an AUCTeX user, you may also install the file `dox.el` in a
+suitable AUCTeX style directory.

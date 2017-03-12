@@ -1,4 +1,4 @@
-;;; dox.el --- AUC-TeX style file for DoX
+;;; dox.el --- AUCTeX style file for DoX
 
 ;; Copyright (C) 2009, 2010, 2017 Didier Verna
 
@@ -29,7 +29,7 @@
 	"Function name" "Environment name" "Index category name")))))
 
 (defun doxitem (envname)
-  "Register a new environment ENVNAME with AUC-TeX.
+  "Register a new environment ENVNAME with AUCTeX.
 
 The effect is to make docTeX mode treat this new environment just like
 the macro and environment ones. Currently, this means avoiding inner
@@ -48,7 +48,7 @@ by means or regexp combination."
 	docTeX-indent-inner-fixed))
 
 (defun doxitems (&rest envnames)
-  "Register environments ENVNAMES with AUC-TeX.
+  "Register environments ENVNAMES with AUCTeX.
 See the function `doxitem' for more information."
   (mapc #'doxitem envnames))
 

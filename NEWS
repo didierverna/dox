@@ -26,7 +26,7 @@ allowing to create control sequence based documentation items.
 
 * Version 2.1
 ** New lisp functions doxitem[s]
-to register new documentation environments with AUC-TeX.
+to register new documentation environments with AUCTeX.
 
 * Version 2.0
 ** Optional argument to \doxitem
