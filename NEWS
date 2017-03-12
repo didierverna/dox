@@ -16,6 +16,9 @@ distributions of LaTeX version 2005/12/01 or later.
 DoX consists of the files listed in the file `README.md'.
 
 
+*Version 2.4
+** Improve AUCTeX support
+
 * Version 2.3
 ** Support Doc's internal \saved@indexname command
 thanks to Falk Hanisch.
