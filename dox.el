@@ -22,21 +22,23 @@
 ;;; Code:
 
 (TeX-add-style-hook "dox"
-  (function
-   (lambda ()
-     (TeX-add-symbols
-      '("doxitem" [ "Options" ]
-	"Function name" "Environment name" "Index category name")))))
+  (lambda ()
+    (TeX-add-symbols
+     '("doxitem" [ TeX-arg-key-val (("idxtype") ("macrolike")) ]
+       "Function name" "Environment name" "Index category name"))
+    (when (and (featurep 'font-latex)
+	       (eq TeX-install-font-lock 'font-latex-setup))
+      (font-latex-add-keywords '(("doxitem" "[{{{")) 'function)))
+  LaTeX-dialect)
 
 (defun doxitem (envname)
   "Register a new environment ENVNAME with AUCTeX.
+The effect is to make docTeX mode treat this new environment just
+like the macro and environment ones.  Currently, this means
+avoiding inner indentation.
 
-The effect is to make docTeX mode treat this new environment just like
-the macro and environment ones. Currently, this means avoiding inner
-indentation.
-
-ENVNAME is actually a regexp appearing in a logical group.
-This means that you can register several environments simultaneously
+ENVNAME is actually a regexp appearing in a logical group.  This
+means that you can register several environments simultaneously
 by means or regexp combination."
   (make-local-variable 'docTeX-indent-inner-fixed)
   (push (list
