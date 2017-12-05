@@ -523,9 +523,9 @@
 \def\@doxcreatespecialmainindex#1#2#3{%
   \expandafter\def\csname SpecialMain#1Index\endcsname##1{%
     \@bsphack%
-    \special@index{##1\actualchar{\string\ttfamily\space##1} (#2)
+    \special@index{##1\actualchar{\string\ttfamily\space##1} (#2)%
       \encapchar main}%
-    \special@index{#3:\levelchar##1\actualchar{\string\ttfamily\space##1}
+    \special@index{#3:\levelchar##1\actualchar{\string\ttfamily\space##1}%
       \encapchar main}%
     \@esphack}}
 \def\@doxcreatespecialmainmacrolikeindex#1#2#3{%
@@ -536,7 +536,7 @@
       \string\verb\quotechar*\verbatimchar\bslash\@gtempa\verbatimchar
       \space(#2)\encapchar main}%
     \special@index{#3:\levelchar\@gtempa\actualchar%
-      \string\verb\quotechar*\verbatimchar\bslash\@gtempa\verbatimchar
+      \string\verb\quotechar*\verbatimchar\bslash\@gtempa\verbatimchar%
       \encapchar main}%
     \@esphack}}
 
@@ -553,7 +553,7 @@
   \expandafter\def\csname Special#1Index\endcsname##1{%
     \@bsphack%
     \index{##1\actualchar{\protect\ttfamily##1} (#2)\encapchar usage}%
-    \index{#3:\levelchar##1\actualchar{\protect\ttfamily##1}
+    \index{#3:\levelchar##1\actualchar{\protect\ttfamily##1}%
       \encapchar usage}%
     \@esphack}}
 \def\@doxcreatespecialmacrolikeindex#1#2#3{%
@@ -564,7 +564,7 @@
       \string\verb\quotechar*\verbatimchar\bslash\@gtempa\verbatimchar
       \space(#2)\encapchar usage}%
     \index{#3:\levelchar\@gtempa\actualchar
-      \string\verb\quotechar*\verbatimchar\bslash\@gtempa\verbatimchar
+      \string\verb\quotechar*\verbatimchar\bslash\@gtempa\verbatimchar%
       \encapchar usage}%
     \@esphack}}
 
