@@ -3,3 +3,5 @@ set \MacroTopsep=0pt
 
 * Fix the noprint option for environments, which still eats marginal vertical
 space.
+
+* Look into hypdoc.
